@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Results - AI Gaming Aptitude Assessment</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/game.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>🎮 AI Aptitude Assessment</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="game-modes.html" class="nav-link">Games</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container" id="results-container">
+            <!-- Results will be dynamically inserted here -->
+            <div class="loading-screen">
+                <div class="loading-spinner"></div>
+                <p>Calculating results...</p>
+            </div>
+        </div>
+    </main>
+
+    <script src="assets/js/config.js"></script>
+    <script src="assets/js/storage-manager.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            const resultsContainer = document.getElementById('results-container');
+            const storageManager = new StorageManager();
+
+            try {
+                const urlParams = new URLSearchParams(window.location.search);
+                const sessionId = urlParams.get('session');
+                
+                if (!sessionId) {
+                    throw new Error("No session ID found in URL.");
+                }
+
+                const sessions = storageManager.get(CONFIG.STORAGE_KEYS.GAME_SESSIONS) || [];
+                const currentSession = sessions.find(s => s.id === sessionId);
+
+                if (!currentSession) {
+                    throw new Error("Could not find results for this session.");
+                }
+
+                displayResults(currentSession);
+
+            } catch (error) {
+                console.error("Error loading results:", error);
+                resultsContainer.innerHTML = `
+                    <div class="error-screen">
+                        <h2>⚠️ Could Not Load Results</h2>
+                        <p>${error.message}</p>
+                        <a href="game-modes.html" class="btn btn-secondary">Play a New Game</a>
+                    </div>
+                `;
+            }
+        });
+
+        function displayResults(session) {
+            const resultsContainer = document.getElementById('results-container');
+            
+            const accuracy = session.accuracy ? session.accuracy.toFixed(1) : 0;
+
+            let subjectBreakdownHtml = '<h3></h3><div class="subject-breakdown">';
+             
+            subjectBreakdownHtml += '</div>';
+
+            resultsContainer.innerHTML = `
+                <div class="results-summary">
+                    <h1>Game Over!</h1>
+                    <h2>${session.gameMode.replace('_', ' ')} Results</h2>
+                    
+                    <div class="results-grid">
+                        <div class="result-card">
+                            <div class="result-value">${session.score}</div>
+                            <div class="result-label">Final Score</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-value">${accuracy}%</div>
+                            <div class="result-label">Accuracy</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-value">${session.correctAnswers} / ${session.totalQuestions}</div>
+                            <div class="result-label">Correct Answers</div>
+                        </div>
+                        <div class="result-card">
+                            <div class="result-value">${session.bestStreak}</div>
+                            <div class="result-label">Best Streak</div>
+                        </div>
+                    </div>
+
+                    ${subjectBreakdownHtml}
+
+                    <div class="results-actions">
+                        <a href="game-modes.html" class="btn btn-primary">Play Again</a>
+                        <a href="index.html" class="btn btn-secondary">Back to Home</a>
+                    </div>
+                </div>
+            `;
+        }
+    </script>
+</body>
+</html>

@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Game Modes - AI Aptitude Assessment</title>
+    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="assets/css/game.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+</head>
+<body>
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <h1>🎮 AI Aptitude Assessment</h1>
+            </div>
+            <div class="nav-menu">
+                <a href="index.html" class="nav-link">Home</a>
+                <a href="game-modes.html" class="nav-link active">Games</a>
+            </div>
+        </div>
+    </nav>
+
+    <main class="main-content">
+        <div class="container">
+            <section class="section">
+                <div class="section-header">
+                    <h1>Choose Your Challenge</h1>
+                    <p>Select a game mode that matches your learning style and goals.</p>
+                </div>
+
+                <div class="game-modes-grid">
+                    <!-- Rapid Fire Mode -->
+                    <div class="game-mode-card" onclick="startGame('RAPID_FIRE')">
+                        <div class="game-mode-icon">⚡</div>
+                        <h2>Rapid Fire</h2>
+                        <div class="difficulty-indicator">
+                            <span class="badge badge-warning">High Intensity</span>
+                        </div>
+                        <p>Test your quick thinking with 20 rapid-fire questions under time pressure.</p>
+                        <div class="game-mode-stats">
+                            <div class="stat-item">
+                                <span class="stat-icon">📝</span>
+                                <span class="stat-text">20 Questions</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">⏱️</span>
+                                <span class="stat-text">30s per question</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">🎯</span>
+                                <span class="stat-text">~10 minutes</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">Start Rapid Fire</button>
+                    </div>
+
+                    <!-- Survival Mode -->
+                    <div class="game-mode-card" onclick="startGame('SURVIVAL')">
+                        <div class="game-mode-icon">🎯</div>
+                        <h2>Survival</h2>
+                        <div class="difficulty-indicator">
+                            <span class="badge badge-error">Challenging</span>
+                        </div>
+                        <p>Keep answering until you get one wrong. How long can you survive?</p>
+                        <div class="game-mode-stats">
+                            <div class="stat-item">
+                                <span class="stat-icon">♾️</span>
+                                <span class="stat-text">Unlimited Questions</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">⏱️</span>
+                                <span class="stat-text">45s per question</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">💥</span>
+                                <span class="stat-text">One mistake = Game Over</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">Start Survival</button>
+                    </div>
+
+                    <!-- Marathon Mode -->
+                    <div class="game-mode-card" onclick="startGame('MARATHON')">
+                        <div class="game-mode-icon">🏃</div>
+                        <h2>Marathon</h2>
+                        <div class="difficulty-indicator">
+                            <span class="badge badge-info">Comprehensive</span>
+                        </div>
+                        <p>A comprehensive test of 50 questions covering all subjects.</p>
+                        <div class="game-mode-stats">
+                            <div class="stat-item">
+                                <span class="stat-icon">📚</span>
+                                <span class="stat-text">50 Questions</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">⏱️</span>
+                                <span class="stat-text">60s per question</span>
+                            </div>
+                            <div class="stat-item">
+                                <span class="stat-icon">🎓</span>
+                                <span class="stat-text">~50 minutes</span>
+                            </div>
+                        </div>
+                        <button class="btn btn-primary">Start Marathon</button>
+                    </div>
+                </div>
+            </section>
+        </div>
+    </main>
+    
+    <script>
+        function startGame(mode) {
+            // Store the selected mode in sessionStorage to be picked up by the quiz page
+            sessionStorage.setItem('selectedGameMode', mode);
+            // Redirect to the quiz interface
+            window.location.href = 'quiz-interface.html';
+        }
+    </script>
+
+
+<style>
+        .game-modes-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 2rem;
+            margin-bottom: 4rem;
+        }
+
+        .game-mode-card {
+            background: var(--bg-light);
+            border-radius: var(--radius-xl);
+            border: 2px solid var(--border-color);
+            padding: 2rem;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .game-mode-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: var(--gradient-primary);
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .game-mode-card:hover::before {
+            opacity: 1;
+        }
+
+        .game-mode-header {
+            text-align: center;
+            margin-bottom: 1.5rem;
+        }
+
+        .game-mode-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+        }
+
+        .game-mode-header h2 {
+            margin-bottom: 0.5rem;
+            color: var(--text-color);
+        }
+
+        .difficulty-indicator {
+            margin-top: 0.5rem;
+        }
+
+        .game-mode-description {
+            margin-bottom: 2rem;
+            text-align: center;
+        }
+
+        .game-mode-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-item {
+            text-align: center;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border-color);
+        }
+
+        .stat-icon {
+            display: block;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-text {
+            font-size: 0.875rem;
+            color: var(--text-muted);
+            font-weight: 500;
+        }
+
+        .game-mode-features {
+            margin-bottom: 2rem;
+        }
+
+        .game-mode-features ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .game-mode-features li {
+            padding: 0.5rem 0;
+            color: var(--text-muted);
+            font-size: 0.875rem;
+        }
+
+        .game-mode-actions {
+            text-align: center;
+        }
+
+        .best-score {
+            margin-top: 1rem;
+            font-size: 0.875rem;
+            color: var(--text-muted);
+        }
+
+        .best-score strong {
+            color: var(--primary-color);
+            font-size: 1rem;
+        }
+
+        .custom-mode-section {
+            margin-top: 4rem;
+        }
+
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+
+        .checkbox-group {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+        }
+
+        .checkbox-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            cursor: pointer;
+            padding: 0.5rem;
+            border-radius: var(--radius-md);
+            transition: background 0.2s;
+        }
+
+        .checkbox-item:hover {
+            background: var(--bg-light);
+        }
+
+        .checkbox-item input[type="checkbox"] {
+            width: 18px;
+            height: 18px;
+        }
+
+        .form-actions {
+            text-align: center;
+            margin-top: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .game-modes-grid {
+                grid-template-columns: 1fr;
+                gap: 1.5rem;
+            }
+            
+            .game-mode-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .checkbox-group {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+
+</body>
+</html>
+
+
+
