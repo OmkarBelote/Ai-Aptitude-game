@@ -31,7 +31,7 @@
 
                 <div class="game-modes-grid">
                     <!-- Rapid Fire Mode -->
-                    <div class="game-mode-card" onclick="startGame('RAPID_FIRE')">
+                    <div class="game-mode-card">
                         <div class="game-mode-icon">⚡</div>
                         <h2>Rapid Fire</h2>
                         <div class="difficulty-indicator">
@@ -52,11 +52,11 @@
                                 <span class="stat-text">~10 minutes</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary">Start Rapid Fire</button>
+                        <button class="btn btn-primary" onclick="startGame('RAPID_FIRE')">Start Rapid Fire</button>
                     </div>
 
                     <!-- Survival Mode -->
-                    <div class="game-mode-card" onclick="startGame('SURVIVAL')">
+                    <div class="game-mode-card">
                         <div class="game-mode-icon">🎯</div>
                         <h2>Survival</h2>
                         <div class="difficulty-indicator">
@@ -77,11 +77,11 @@
                                 <span class="stat-text">One mistake = Game Over</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary">Start Survival</button>
+                        <button class="btn btn-primary" onclick="startGame('SURVIVAL')">Start Survival</button>
                     </div>
 
                     <!-- Marathon Mode -->
-                    <div class="game-mode-card" onclick="startGame('MARATHON')">
+                    <div class="game-mode-card">
                         <div class="game-mode-icon">🏃</div>
                         <h2>Marathon</h2>
                         <div class="difficulty-indicator">
@@ -102,7 +102,7 @@
                                 <span class="stat-text">~50 minutes</span>
                             </div>
                         </div>
-                        <button class="btn btn-primary">Start Marathon</button>
+                        <button class="btn btn-primary" onclick="startGame('MARATHON')">Start Marathon</button>
                     </div>
                 </div>
             </section>

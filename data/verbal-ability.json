@@ -240,6 +240,42 @@
       "explanation": "The author places contrasting elements (harsh city sounds vs. beautiful concert hall music) side by side for dramatic effect",
       "time_limit": 200,
       "points": 30
+    },
+    {
+      "id": "verbal_021",
+      "topic": "Sentence Correction",
+      "difficulty": "Medium",
+      "question": "Choose the best way to rewrite the underlined part: 'He told me he would be home at 8 pm, but I am not sure if he _.'",
+      "type": "multiple_choice",
+      "options": ["will be", "is", "was", "would be"],
+      "correct_answer": "will be",
+      "explanation": "The context is present tense ('I am not sure') referring to a future event, so 'will be' is the correct verb form.",
+      "time_limit": 75,
+      "points": 15
+    },
+    {
+      "id": "verbal_022",
+      "topic": "Antonyms",
+      "difficulty": "Medium",
+      "question": "Choose the word opposite in meaning to 'PARADOXICAL':",
+      "type": "multiple_choice",
+      "options": ["Inconsistent", "Consistent", "Contradictory", "Illogical"],
+      "correct_answer": "Consistent",
+      "explanation": "Paradoxical means self-contradictory. The opposite is consistent.",
+      "time_limit": 60,
+      "points": 15
+    },
+    {
+      "id": "verbal_023",
+      "topic": "Synonyms",
+      "difficulty": "Hard",
+      "question": "Choose the word most similar in meaning to 'OBFUSCATE':",
+      "type": "multiple_choice",
+      "options": ["Clarify", "Simplify", "Obscure", "Reveal"],
+      "correct_answer": "Obscure",
+      "explanation": "To obfuscate means to make something unclear or difficult to understand; obscure is the closest synonym.",
+      "time_limit": 90,
+      "points": 20
     }
   ]
 }

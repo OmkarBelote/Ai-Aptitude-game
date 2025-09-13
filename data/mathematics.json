@@ -240,6 +240,30 @@
       "explanation": "f(2) = 2³ - 6(2²) + 11(2) - 6 = 8 - 24 + 22 - 6 = 0. This means x = 2 is a root of the polynomial.",
       "time_limit": 120,
       "points": 30
+    },
+    {
+      "id": "math_021",
+      "topic": "Number System",
+      "difficulty": "Medium",
+      "question": "What is the largest number that divides 70 and 125, leaving remainders 1 and 8, respectively?",
+      "type": "multiple_choice",
+      "options": ["13", "17", "18", "19"],
+      "correct_answer": "13",
+      "explanation": "The number must divide (70-1) and (125-8). So we need to find the HCF of 69 and 117. Factors of 69 are 1, 3, 23, 69. Factors of 117 are 1, 3, 9, 13, 39, 117. The highest common factor is 13.",
+      "time_limit": 150,
+      "points": 15
+    },
+    {
+      "id": "math_022",
+      "topic": "Arithmetic",
+      "difficulty": "Easy",
+      "question": "Find the value of 0.35 + 0.23 + 0.42",
+      "type": "multiple_choice",
+      "options": ["0.9", "1.0", "1.1", "1.2"],
+      "correct_answer": "1.0",
+      "explanation": "0.35 + 0.23 + 0.42 = (35+23+42)/100 = 100/100 = 1.0",
+      "time_limit": 45,
+      "points": 10
     }
   ]
 }

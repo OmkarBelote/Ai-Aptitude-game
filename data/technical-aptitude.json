@@ -117,7 +117,7 @@
       "type": "multiple_choice",
       "options": ["Java Script Object Notation", "JavaScript Object Notation", "Java Syntax Object Notation", "JavaScript Organized Notation"],
       "correct_answer": "JavaScript Object Notation",
-      "explanation": "JSON stands for JavaScript Object Notation, a lightweight data interchange format[2]",
+      "explanation": "JSON stands for JavaScript Object Notation, a lightweight data interchange format",
       "time_limit": 60,
       "points": 15
     },
@@ -152,8 +152,8 @@
       "question": "Which sorting algorithm has the best average-case time complexity?",
       "type": "multiple_choice",
       "options": ["Bubble Sort", "Quick Sort", "Merge Sort", "Selection Sort"],
-      "correct_answer": "Merge Sort",
-      "explanation": "Merge Sort has consistent O(n log n) time complexity in all cases, while Quick Sort has O(n²) worst case",
+      "correct_answer": "Quick Sort",
+      "explanation": "Quick Sort has an average-case time complexity of O(n log n), which is generally the best among comparison-based sorts. Merge Sort is also O(n log n) but has a higher constant factor. Bubble and Selection sort are O(n²).",
       "time_limit": 120,
       "points": 20
     },
@@ -240,6 +240,42 @@
       "explanation": "The brute force approach to TSP checks all possible permutations of cities, resulting in O(n!) time complexity",
       "time_limit": 180,
       "points": 30
+    },
+    {
+      "id": "tech_021",
+      "topic": "Operating Systems",
+      "difficulty": "Medium",
+      "question": "What is the main function of a 'semaphore' in an operating system?",
+      "type": "multiple_choice",
+      "options": ["To manage memory allocation", "To prevent deadlocks and manage access to shared resources", "To handle I/O requests", "To schedule processes"],
+      "correct_answer": "To prevent deadlocks and manage access to shared resources",
+      "explanation": "A semaphore is a variable or abstract data type used to control access to a common resource by multiple processes and prevent race conditions and deadlocks.",
+      "time_limit": 90,
+      "points": 15
+    },
+    {
+      "id": "tech_022",
+      "topic": "Computer Networks",
+      "difficulty": "Medium",
+      "question": "Which of the following layers of the OSI model is responsible for routing data from source to destination across a network?",
+      "type": "multiple_choice",
+      "options": ["Data Link Layer", "Transport Layer", "Network Layer", "Physical Layer"],
+      "correct_answer": "Network Layer",
+      "explanation": "The Network Layer (Layer 3) is responsible for logical addressing (e.g., IP addresses) and routing, which determines the path data takes across a network.",
+      "time_limit": 90,
+      "points": 15
+    },
+    {
+      "id": "tech_023",
+      "topic": "Object-Oriented Programming",
+      "difficulty": "Hard",
+      "question": "What is method overloading in OOP?",
+      "type": "multiple_choice",
+      "options": ["A method that is defined in a superclass and overridden in a subclass", "Defining multiple methods with the same name but different parameters", "A method that calls itself recursively", "Defining a method that has no return type"],
+      "correct_answer": "Defining multiple methods with the same name but different parameters",
+      "explanation": "Method overloading is a feature that allows a class to have more than one method having the same name, if their argument lists are different.",
+      "time_limit": 120,
+      "points": 20
     }
   ]
 }

@@ -11,6 +11,7 @@ class QuestionManager {
         try {
             const questionPool = [];
             for (const subject of settings.subjects) {
+                // Check if the subject questions are already loaded to avoid redundant network calls
                 if (!this.loadedSubjects.has(subject)) {
                     const subjectQuestions = await this.loadSubjectFromFile(subject);
                     this.questionPool.set(subject, subjectQuestions);
@@ -23,20 +24,19 @@ class QuestionManager {
                 throw new Error('No questions were found. Check file paths and JSON files.');
             }
 
+            // Filter questions by difficulty if a specific difficulty is requested
             let filtered = questionPool;
             if (settings.difficulty && settings.difficulty !== 'Mixed' && settings.difficulty !== 'Auto') {
                 filtered = questionPool.filter(q => q.difficulty === settings.difficulty);
             }
             
-            if (settings.shuffleQuestions) {
-                this.shuffleArray(filtered);
-            }
+            // Shuffle the entire filtered pool of questions
+            this.shuffleArray(filtered);
 
             const finalQuestions = filtered.slice(0, settings.questionsCount);
 
-            if (settings.shuffleOptions) {
-                finalQuestions.forEach(q => this.shuffleQuestionOptions(q));
-            }
+            // Shuffle the options for each question to ensure they appear in a different order
+            finalQuestions.forEach(q => this.shuffleQuestionOptions(q));
 
             return finalQuestions;
 
@@ -54,13 +54,15 @@ class QuestionManager {
                 throw new Error(`HTTP error! Status: ${response.status} for file ${filename}`);
             }
             const data = await response.json();
-            return data.questions || [];
+            // Assign a subject to each question for easy reference later
+            return (data.questions || []).map(q => ({ ...q, subject: subjectName }));
         } catch (error) {
             console.error(`Failed to load or parse ${filename}:`, error);
             throw error;
         }
     }
     
+    // Fisher-Yates shuffle algorithm
     shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
             const j = Math.floor(Math.random() * (i + 1));
@@ -69,9 +71,14 @@ class QuestionManager {
         return array;
     }
 
+    // Shuffle options for a single question
     shuffleQuestionOptions(question) {
         if (question.options) {
+            // Get the correct answer before shuffling
+            const correctAnswer = question.correct_answer;
             this.shuffleArray(question.options);
+            // Re-assign the correct answer based on its new position (not necessary, but a good practice)
+            // The original logic already handles this correctly by comparing the selected option text
         }
         return question;
     }
