@@ -77,6 +77,13 @@
     color: var(--text-color);
 }
 
+.modal-actions {
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 2rem;
+}
+
 /* Tooltip */
 .tooltip {
     position: relative;

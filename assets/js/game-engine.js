@@ -164,6 +164,7 @@ class GameEngine {
         if (this.gameState !== 'playing') return;
 
         this.currentQuestionIndex++;
+
         // Dynamic difficulty adjustment
         if (this.settings.difficulty === 'Auto' && this.currentQuestionIndex < this.questions.length) {
             this.questions = this.questionManager.getDynamicQuestions(this.questions, this.currentQuestionIndex, this.currentSession);
@@ -200,5 +201,39 @@ class GameEngine {
         const sessions = this.storageManager.get(key, []);
         sessions.push(this.currentSession);
         this.storageManager.set(key, sessions);
+    }
+
+    // Method to show the confirmation modal
+    showQuitConfirmation() {
+        if (this.gameState !== 'playing') return;
+
+        // Create the modal HTML
+        const modalHtml = `
+            <div id="quit-modal" class="modal">
+                <div class="modal-content">
+                    <h3>Are you sure you want to quit?</h3>
+                    <p>Your current progress will be saved, and you will be taken to the results page.</p>
+                    <div class="modal-actions">
+                        <button id="cancel-quit-btn" class="btn btn-secondary">Cancel</button>
+                        <button id="confirm-quit-btn" class="btn btn-danger">Quit Game</button>
+                    </div>
+                </div>
+            </div>
+        `;
+        document.body.insertAdjacentHTML('beforeend', modalHtml);
+
+        const modal = document.getElementById('quit-modal');
+        modal.classList.add('active');
+        
+        // Add event listeners for the modal buttons
+        document.getElementById('cancel-quit-btn').addEventListener('click', () => {
+            modal.classList.remove('active');
+            modal.remove();
+        });
+
+        document.getElementById('confirm-quit-btn').addEventListener('click', () => {
+            modal.remove();
+            this.completeGame();
+        });
     }
 }

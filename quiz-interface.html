@@ -17,6 +17,7 @@
             <div class="nav-menu">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="game-modes.html" class="nav-link">Games</a>
+                <button id="quit-btn" class="nav-link">Quit Game</button>
             </div>
         </div>
     </nav>
@@ -40,12 +41,18 @@
     <script>
         document.addEventListener('DOMContentLoaded', async () => {
             const gameContainer = document.getElementById('game-container');
+            const quitBtn = document.getElementById('quit-btn');
             
             try {
                 const gameMode = sessionStorage.getItem('selectedGameMode') || 'RAPID_FIRE';
                 
                 const gameEngine = new GameEngine();
                 
+                // Add event listener for the Quit button
+                quitBtn.addEventListener('click', () => {
+                    gameEngine.showQuitConfirmation();
+                });
+
                 const gameStarted = await gameEngine.startGame(gameMode);
 
                 if (!gameStarted) {
