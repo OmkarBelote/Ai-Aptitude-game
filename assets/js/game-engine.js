@@ -96,6 +96,7 @@ class GameEngine {
 
     // Loads the current question into the renderer
     loadCurrentQuestion() {
+        // This check is the key to fixing the bug. It ensures we don't try to load a question that doesn't exist.
         if (this.currentQuestionIndex >= this.questions.length && !this.settings.endOnWrongAnswer) {
             this.completeGame();
             return;
@@ -206,15 +207,12 @@ class GameEngine {
     showQuitConfirmation() {
         if (this.gameState !== 'playing') return;
 
-        // Hide the question container and show the modal
-        document.getElementById('game-container').classList.add('hidden');
         const modal = document.getElementById('quit-modal');
         modal.classList.add('active');
         
         // Add event listeners for the modal buttons
         document.getElementById('cancel-quit-btn').onclick = () => {
             modal.classList.remove('active');
-            document.getElementById('game-container').classList.remove('hidden');
         };
 
         document.getElementById('confirm-quit-btn').onclick = () => {
