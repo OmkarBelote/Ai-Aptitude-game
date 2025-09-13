@@ -18,7 +18,7 @@
             <div class="nav-menu">
                 <a href="index.html" class="nav-link">Home</a>
                 <a href="game-modes.html" class="nav-link">Games</a>
-                <button id="quit-btn" class="nav-link">Quit Game</button>
+                <a href="#" id="quit-btn" class="nav-link btn-danger">Quit Game</a>
             </div>
         </div>
     </nav>
@@ -61,7 +61,8 @@
                 const gameEngine = new GameEngine();
                 
                 // Add event listener for the Quit button
-                quitBtn.addEventListener('click', () => {
+                quitBtn.addEventListener('click', (e) => {
+                    e.preventDefault(); // Prevent default link behavior
                     gameEngine.showQuitConfirmation();
                 });
 

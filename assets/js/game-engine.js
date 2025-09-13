@@ -89,6 +89,7 @@ class GameEngine {
 
     // Connects the renderer's actions to the engine's logic
     setupRendererCallbacks() {
+        // The onNext callback is now the only way to advance to the next question
         this.questionRenderer
             .onAnswer((answerData) => this.handleQuestionAnswer(answerData))
             .onNext(() => this.nextQuestion());
