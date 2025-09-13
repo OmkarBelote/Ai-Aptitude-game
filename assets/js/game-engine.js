@@ -103,7 +103,7 @@ class GameEngine {
 
         const question = this.questions[this.currentQuestionIndex];
         this.currentSession.difficultyHistory.push(question.difficulty);
-        this.questionRenderer.renderQuestion(question, this.currentQuestionIndex + 1, this.settings.questionsCount);
+        this.questionRenderer.renderQuestion(question, this.currentQuestionIndex + 1, this.questions.length);
     }
 
     // Processes the user's answer
@@ -164,7 +164,6 @@ class GameEngine {
         if (this.gameState !== 'playing') return;
 
         this.currentQuestionIndex++;
-
         // Dynamic difficulty adjustment
         if (this.settings.difficulty === 'Auto' && this.currentQuestionIndex < this.questions.length) {
             this.questions = this.questionManager.getDynamicQuestions(this.questions, this.currentQuestionIndex, this.currentSession);
@@ -207,33 +206,19 @@ class GameEngine {
     showQuitConfirmation() {
         if (this.gameState !== 'playing') return;
 
-        // Create the modal HTML
-        const modalHtml = `
-            <div id="quit-modal" class="modal">
-                <div class="modal-content">
-                    <h3>Are you sure you want to quit?</h3>
-                    <p>Your current progress will be saved, and you will be taken to the results page.</p>
-                    <div class="modal-actions">
-                        <button id="cancel-quit-btn" class="btn btn-secondary">Cancel</button>
-                        <button id="confirm-quit-btn" class="btn btn-danger">Quit Game</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        document.body.insertAdjacentHTML('beforeend', modalHtml);
-
+        // Hide the question container and show the modal
+        document.getElementById('game-container').classList.add('hidden');
         const modal = document.getElementById('quit-modal');
         modal.classList.add('active');
         
         // Add event listeners for the modal buttons
-        document.getElementById('cancel-quit-btn').addEventListener('click', () => {
+        document.getElementById('cancel-quit-btn').onclick = () => {
             modal.classList.remove('active');
-            modal.remove();
-        });
+            document.getElementById('game-container').classList.remove('hidden');
+        };
 
-        document.getElementById('confirm-quit-btn').addEventListener('click', () => {
-            modal.remove();
+        document.getElementById('confirm-quit-btn').onclick = () => {
             this.completeGame();
-        });
+        };
     }
 }
