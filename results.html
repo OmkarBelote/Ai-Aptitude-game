@@ -6,6 +6,8 @@
     <title>Results - AI Gaming Aptitude Assessment</title>
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/game.css">
+    <link rel="stylesheet" href="assets/css/components.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
     <nav class="navbar">
@@ -22,7 +24,6 @@
 
     <main class="main-content">
         <div class="container" id="results-container">
-            <!-- Results will be dynamically inserted here -->
             <div class="loading-screen">
                 <div class="loading-spinner"></div>
                 <p>Calculating results...</p>
@@ -70,13 +71,70 @@
             const resultsContainer = document.getElementById('results-container');
             
             const accuracy = session.accuracy ? session.accuracy.toFixed(1) : 0;
+            const totalQuestions = session.totalQuestions || 0;
+            const correctAnswers = session.correctAnswers || 0;
+            const bestStreak = session.bestStreak || 0;
 
-            let subjectBreakdownHtml = '<h3></h3><div class="subject-breakdown">';
-             
-            subjectBreakdownHtml += '</div>';
+            let subjectBreakdownHtml = '';
+            const subjects = Object.keys(session.subjectBreakdown);
+            
+            if (subjects.length > 0) {
+                subjectBreakdownHtml = `
+                    <div class="subject-breakdown-section">
+                        <h3>Subject Performance Breakdown</h3>
+                        <div class="subject-breakdown-grid">
+                            ${subjects.map(subject => `
+                                <div class="subject-item">
+                                    <div class="subject-name">${subject}</div>
+                                    <div class="subject-accuracy">${session.subjectBreakdown[subject].accuracy.toFixed(1)}%</div>
+                                    <div class="subject-stats">
+                                        (${session.subjectBreakdown[subject].correct} / ${session.subjectBreakdown[subject].total} Correct)
+                                    </div>
+                                </div>
+                            `).join('')}
+                        </div>
+                    </div>
+                `;
+            }
+            
+            let difficultyBreakdownHtml = '';
+            const difficultyCounts = session.difficultyHistory.reduce((acc, curr) => {
+                acc[curr] = (acc[curr] || 0) + 1;
+                return acc;
+            }, {});
+
+            if (Object.keys(difficultyCounts).length > 0) {
+                const labels = Object.keys(difficultyCounts);
+                const data = Object.values(difficultyCounts);
+                
+                difficultyBreakdownHtml = `
+                    <div class="difficulty-breakdown-section">
+                        <h3>Difficulty Progression</h3>
+                        <canvas id="difficultyChart"></canvas>
+                        <p class="chart-caption">This chart shows the number of questions you attempted at each difficulty level. In 'Survival' mode, this reflects your dynamic progression.</p>
+                    </div>
+                `;
+            }
+
+            // Generate recommendations based on performance
+            let recommendationsHtml = '';
+            if (subjects.length > 0) {
+                 const weakestSubject = subjects.sort((a, b) => session.subjectBreakdown[a].accuracy - session.subjectBreakdown[b].accuracy)[0];
+                 const weakestTopic = Object.keys(session.subjectBreakdown[weakestSubject].topics).sort((a, b) => session.subjectBreakdown[weakestSubject].topics[a].accuracy - session.subjectBreakdown[weakestSubject].topics[b].accuracy)[0];
+                 
+                 recommendationsHtml = `
+                    <div class="recommendations">
+                        <h3>Personalized Recommendations</h3>
+                        <p>Based on your performance, we recommend focusing on **${weakestSubject}**.</p>
+                        <p>Specifically, you could improve on topics like **${weakestTopic}** within that subject.</p>
+                        <a href="game-modes.html" class="btn btn-secondary">Practice ${weakestSubject}</a>
+                    </div>
+                 `;
+            }
+
 
             resultsContainer.innerHTML = `
-                <div class="results-summary">
+                <div class="results-summary fade-in">
                     <h1>Game Over!</h1>
                     <h2>${session.gameMode.replace('_', ' ')} Results</h2>
                     
@@ -90,16 +148,18 @@
                             <div class="result-label">Accuracy</div>
                         </div>
                         <div class="result-card">
-                            <div class="result-value">${session.correctAnswers} / ${session.totalQuestions}</div>
+                            <div class="result-value">${correctAnswers} / ${totalQuestions}</div>
                             <div class="result-label">Correct Answers</div>
                         </div>
                         <div class="result-card">
-                            <div class="result-value">${session.bestStreak}</div>
+                            <div class="result-value">${bestStreak}</div>
                             <div class="result-label">Best Streak</div>
                         </div>
                     </div>
 
                     ${subjectBreakdownHtml}
+                    ${difficultyBreakdownHtml}
+                    ${recommendationsHtml}
 
                     <div class="results-actions">
                         <a href="game-modes.html" class="btn btn-primary">Play Again</a>
@@ -107,6 +167,56 @@
                     </div>
                 </div>
             `;
+            
+            if (Object.keys(difficultyCounts).length > 0) {
+                 renderDifficultyChart(difficultyCounts);
+            }
+        }
+        
+        function renderDifficultyChart(data) {
+            const ctx = document.getElementById('difficultyChart').getContext('2d');
+            const labels = Object.keys(data);
+            const values = Object.values(data);
+            
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Questions Attempted',
+                        data: values,
+                        backgroundColor: [
+                            'rgba(16, 185, 129, 0.5)',
+                            'rgba(59, 130, 246, 0.5)',
+                            'rgba(245, 158, 11, 0.5)',
+                            'rgba(239, 68, 68, 0.5)'
+                        ],
+                        borderColor: [
+                            'var(--success-color)',
+                            'var(--info-color)',
+                            'var(--warning-color)',
+                            'var(--error-color)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: { color: 'var(--text-muted)' }
+                        },
+                        x: {
+                            ticks: { color: 'var(--text-muted)' }
+                        }
+                    },
+                    plugins: {
+                        legend: { display: false },
+                        title: { display: false }
+                    }
+                }
+            });
         }
     </script>
 </body>

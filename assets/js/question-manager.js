@@ -28,11 +28,10 @@ class QuestionManager {
             let filtered = questionPool;
             if (settings.difficulty && settings.difficulty !== 'Mixed' && settings.difficulty !== 'Auto') {
                 filtered = questionPool.filter(q => q.difficulty === settings.difficulty);
+            } else {
+                 this.shuffleArray(filtered); // Shuffle for Mixed/Auto mode initial questions
             }
             
-            // Shuffle the entire filtered pool of questions
-            this.shuffleArray(filtered);
-
             const finalQuestions = filtered.slice(0, settings.questionsCount);
 
             // Shuffle the options for each question to ensure they appear in a different order
@@ -62,6 +61,44 @@ class QuestionManager {
         }
     }
     
+    // Core AI logic for dynamic question selection
+    getDynamicQuestions(currentQuestions, currentIndex, session) {
+        const lastAnswer = session.answers[session.answers.length - 1];
+        const currentDifficulty = lastAnswer.question.difficulty;
+        let nextDifficulty = currentDifficulty;
+
+        if (lastAnswer.isCorrect) {
+            // User answered correctly, increase difficulty
+            if (currentDifficulty === 'Easy') nextDifficulty = 'Medium';
+            else if (currentDifficulty === 'Medium') nextDifficulty = 'Hard';
+            else if (currentDifficulty === 'Hard') nextDifficulty = 'Expert';
+        } else {
+            // User answered incorrectly, decrease difficulty
+            if (currentDifficulty === 'Expert') nextDifficulty = 'Hard';
+            else if (currentDifficulty === 'Hard') nextDifficulty = 'Medium';
+            else if (currentDifficulty === 'Medium') nextDifficulty = 'Easy';
+        }
+        
+        // Find all questions of the new difficulty that haven't been asked yet
+        const remainingQuestions = this.questionPool.get(lastAnswer.question.subject)
+                                     .filter(q => !session.answers.some(a => a.question.id === q.id));
+
+        const newQuestion = remainingQuestions
+                             .find(q => q.difficulty === nextDifficulty) || this.getRandomQuestion(remainingQuestions);
+
+        if (newQuestion) {
+            // Insert the new question into the array
+            currentQuestions.splice(currentIndex, 0, newQuestion);
+        }
+
+        return currentQuestions;
+    }
+
+    getRandomQuestion(array) {
+        if (array.length === 0) return null;
+        return array[Math.floor(Math.random() * array.length)];
+    }
+
     // Fisher-Yates shuffle algorithm
     shuffleArray(array) {
         for (let i = array.length - 1; i > 0; i--) {
@@ -74,11 +111,7 @@ class QuestionManager {
     // Shuffle options for a single question
     shuffleQuestionOptions(question) {
         if (question.options) {
-            // Get the correct answer before shuffling
-            const correctAnswer = question.correct_answer;
             this.shuffleArray(question.options);
-            // Re-assign the correct answer based on its new position (not necessary, but a good practice)
-            // The original logic already handles this correctly by comparing the selected option text
         }
         return question;
     }

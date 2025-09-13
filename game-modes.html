@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/game.css">
     <link rel="stylesheet" href="assets/css/components.css">
+    <link rel="manifest" href="/manifest.json">
 </head>
 <body>
     <nav class="navbar">
@@ -30,7 +31,6 @@
                 </div>
 
                 <div class="game-modes-grid">
-                    <!-- Rapid Fire Mode -->
                     <div class="game-mode-card">
                         <div class="game-mode-icon">⚡</div>
                         <h2>Rapid Fire</h2>
@@ -55,7 +55,6 @@
                         <button class="btn btn-primary" onclick="startGame('RAPID_FIRE')">Start Rapid Fire</button>
                     </div>
 
-                    <!-- Survival Mode -->
                     <div class="game-mode-card">
                         <div class="game-mode-icon">🎯</div>
                         <h2>Survival</h2>
@@ -80,7 +79,6 @@
                         <button class="btn btn-primary" onclick="startGame('SURVIVAL')">Start Survival</button>
                     </div>
 
-                    <!-- Marathon Mode -->
                     <div class="game-mode-card">
                         <div class="game-mode-icon">🏃</div>
                         <h2>Marathon</h2>
@@ -116,10 +114,18 @@
             // Redirect to the quiz interface
             window.location.href = 'quiz-interface.html';
         }
+        
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
     </script>
-
-
-<style>
+    <style>
         .game-modes-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
@@ -294,9 +300,5 @@
             }
         }
     </style>
-
 </body>
 </html>
-
-
-

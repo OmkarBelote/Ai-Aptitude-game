@@ -78,7 +78,8 @@ class GameEngine {
             answers: [],
             score: 0,
             bestStreak: 0,
-            subjectBreakdown: {}
+            subjectBreakdown: {},
+            difficultyHistory: []
         };
         this.currentQuestionIndex = 0;
         this.score = 0;
@@ -95,12 +96,14 @@ class GameEngine {
 
     // Loads the current question into the renderer
     loadCurrentQuestion() {
-        if (this.currentQuestionIndex >= this.questions.length) {
+        if (this.currentQuestionIndex >= this.questions.length && !this.settings.endOnWrongAnswer) {
             this.completeGame();
             return;
         }
+
         const question = this.questions[this.currentQuestionIndex];
-        this.questionRenderer.renderQuestion(question, this.currentQuestionIndex, this.questions.length);
+        this.currentSession.difficultyHistory.push(question.difficulty);
+        this.questionRenderer.renderQuestion(question, this.currentQuestionIndex + 1, this.settings.questionsCount);
     }
 
     // Processes the user's answer
@@ -132,22 +135,41 @@ class GameEngine {
     updateSubjectBreakdown(answerData) {
         const subject = answerData.question.subject;
         if (!this.currentSession.subjectBreakdown[subject]) {
-            this.currentSession.subjectBreakdown[subject] = { correct: 0, total: 0, accuracy: 0 };
+            this.currentSession.subjectBreakdown[subject] = { correct: 0, total: 0, accuracy: 0, points: 0, topics: {} };
         }
+
         const breakdown = this.currentSession.subjectBreakdown[subject];
         breakdown.total++;
+        breakdown.points += answerData.pointsEarned;
+
         if (answerData.isCorrect) {
             breakdown.correct++;
         }
         breakdown.accuracy = (breakdown.correct / breakdown.total) * 100;
+
+        // Update topic-level breakdown
+        const topic = answerData.question.topic;
+        if (!breakdown.topics[topic]) {
+            breakdown.topics[topic] = { correct: 0, total: 0, accuracy: 0 };
+        }
+        breakdown.topics[topic].total++;
+        if (answerData.isCorrect) {
+            breakdown.topics[topic].correct++;
+        }
+        breakdown.topics[topic].accuracy = (breakdown.topics[topic].correct / breakdown.topics[topic].total) * 100;
     }
 
     // Moves to the next question or ends the game
     nextQuestion() {
         if (this.gameState !== 'playing') return;
 
-        if (this.currentQuestionIndex < this.questions.length - 1) {
-            this.currentQuestionIndex++;
+        this.currentQuestionIndex++;
+        // Dynamic difficulty adjustment
+        if (this.settings.difficulty === 'Auto' && this.currentQuestionIndex < this.questions.length) {
+            this.questions = this.questionManager.getDynamicQuestions(this.questions, this.currentQuestionIndex, this.currentSession);
+        }
+
+        if (this.currentQuestionIndex < this.questions.length) {
             this.loadCurrentQuestion();
         } else {
             this.completeGame();

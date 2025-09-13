@@ -6,6 +6,7 @@
     <title>Quiz - AI Aptitude Assessment</title>
     <link rel="stylesheet" href="assets/css/main.css">
     <link rel="stylesheet" href="assets/css/game.css">
+    <link rel="manifest" href="/manifest.json">
 </head>
 <body>
     <nav class="navbar">
@@ -21,7 +22,6 @@
     </nav>
 
     <main class="main-content">
-        <!-- The Game Engine will populate this container -->
         <div id="game-container" class="game-container">
             <div class="loading-screen">
                 <div class="loading-spinner"></div>
@@ -30,7 +30,6 @@
         </div>
     </main>
 
-    <!-- Scripts: Order is critical for dependencies! -->
     <script src="assets/js/config.js"></script>
     <script src="assets/js/storage-manager.js"></script>
     <script src="assets/js/question-manager.js"></script>
@@ -64,6 +63,16 @@
                 `;
             }
         });
+        
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', () => {
+                navigator.serviceWorker.register('/service-worker.js').then(registration => {
+                    console.log('ServiceWorker registration successful with scope: ', registration.scope);
+                }, err => {
+                    console.log('ServiceWorker registration failed: ', err);
+                });
+            });
+        }
     </script>
 </body>
 </html>

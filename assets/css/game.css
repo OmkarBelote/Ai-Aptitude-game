@@ -63,6 +63,18 @@
     font-size: 1.5rem;
     font-weight: 700;
     color: var(--primary-color);
+    transition: color 0.5s ease-in-out;
+}
+
+.timer-text.danger {
+    color: var(--error-color);
+    animation: pulse 1s infinite;
+}
+
+@keyframes pulse {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.1); }
+    100% { transform: scale(1); }
 }
 
 .question-text {
@@ -103,12 +115,26 @@
     border-color: var(--success-color);
     background: rgba(16, 185, 129, 0.2);
     color: #fff;
+    animation: correct-answer-anim 0.5s ease-out;
 }
 
 .answer-option.incorrect {
     border-color: var(--error-color);
     background: rgba(239, 68, 68, 0.2);
     color: #fff;
+    animation: incorrect-answer-anim 0.5s ease-out;
+}
+
+@keyframes correct-answer-anim {
+    0% { transform: scale(1); }
+    50% { transform: scale(1.03); }
+    100% { transform: scale(1); }
+}
+
+@keyframes incorrect-answer-anim {
+    0%, 100% { transform: translateX(0); }
+    20%, 60% { transform: translateX(-5px); }
+    40%, 80% { transform: translateX(5px); }
 }
 
 .answer-option.disabled {
@@ -179,18 +205,51 @@
     color: var(--text-muted);
 }
 
-.subject-breakdown {
+.subject-breakdown-section, .difficulty-breakdown-section, .recommendations {
+    background: var(--bg-card);
+    border: 1px solid var(--border-color);
+    border-radius: var(--radius-lg);
+    padding: 2rem;
     margin-top: 2rem;
     text-align: left;
 }
 
+.subject-breakdown-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+    gap: 1rem;
+}
+
 .subject-item {
     display: flex;
-    justify-content: space-between;
-    padding: 0.75rem;
-    background: var(--bg-card);
-    border-radius: var(--radius-lg);
-    margin-bottom: 0.5rem;
+    flex-direction: column;
+    padding: 1rem;
+    background: var(--bg-light);
+    border-radius: var(--radius-md);
+    border: 1px solid var(--border-color);
+}
+
+.subject-name {
+    font-weight: 600;
+    margin-bottom: 0.25rem;
+}
+
+.subject-accuracy {
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: var(--success-color);
+}
+
+.subject-stats {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+}
+
+.chart-caption {
+    font-style: italic;
+    font-size: 0.875rem;
+    color: var(--text-muted);
+    margin-top: 1rem;
 }
 
 .results-actions {
